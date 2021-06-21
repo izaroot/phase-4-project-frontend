@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import './App.css';
-import Map from './Map';
+import Map, {MapComponent} from './Map';
 
 
 
@@ -11,11 +11,18 @@ class App extends Component{
       
   // }
 
-  state = {}
+  state = {
+    creatures:[],
+  }
 
   componentDidMount(){
-    
-    
+  fetch("http://localhost:3000/creatures")
+  .then((r) => r.json())
+  .then((creaturesArray) => {
+    this.setState({
+      creatures: creaturesArray
+    })
+  });
   }
   
 
@@ -24,7 +31,7 @@ class App extends Component{
     return( 
       <div id="mapContainer">
         <div id="mapWrapper">
-          <Map />
+          <Map creatures = {this.state.creatures}/>
         </div>
       </div>
       
