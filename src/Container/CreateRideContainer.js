@@ -29,7 +29,7 @@ export default class CreateRideContainer extends Component{
     render(){
         return(
             <div>
-              <RideSelection creature={this.state.selectedCreature} />
+              <RideSelection creature={this.state.selectedCreature} userObj = {this.props.userObj}/>
               <MapContainer setSelectedCreature={this.setSelectedCreature} creatures={this.state.creatures}/>
             </div>
         )

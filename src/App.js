@@ -23,13 +23,24 @@ class App extends Component{
       isLoggedIn: false,
       user: {}
   }
-  
-  componentDidMount(){
-    localStorage.token ? this.setState({isLoggedIn: true}) : this.setState({isLoggedIn: false})
+
+  getUserData = () => {
+    fetch("http://localhost:3000/getuser",
+    {headers:{
+      "Authorization":`Bearer ${localStorage.token}`
+    }})
+    .then((r) => r.json())
+    .then((user) => this.setState({user}))
   }
   
-
-  
+  componentDidMount(){
+    if (localStorage.token) {
+      this.setState({isLoggedIn: true})
+      this.getUserData()
+    } else {
+      this.setState({isLoggedIn: false})
+    }
+  }
 
   setUser = (user) => {
     this.setState({
@@ -75,7 +86,7 @@ class App extends Component{
                   {this.state.isLoggedIn ? null : <LoginContainer setUser={this.setUser} />}
             </Route>
             <Route path="/newride">
-                <CreateRideContainer />
+                <CreateRideContainer userObj = {this.state.user} />
             </Route>
             <Route path="/creatures" >
                 <ShowCreaturesContainer />

@@ -12,19 +12,15 @@ function MapComponent(props) {
            {props.creatures.map(creature => <Marker 
                             onMouseOver={() => setSelectedCreature(creature)}
                             onClick={() => props.setCreature(creature)} 
-                            position={{lat: parseFloat(creature.location.split(",")[0]), lng: parseFloat(creature.location.split(",")[1])}}></Marker>)}
-            {!!selectedCreature ? 
+                            position={{lat: parseFloat(creature.location.split(",")[0]), lng: parseFloat(creature.location.split(",")[1])}}>
+            {selectedCreature === creature ? 
                 <InfoWindow
-                    position={{
-                        lat: parseFloat(selectedCreature.location.split(",")[0]) ,
-                        lng: parseFloat(selectedCreature.location.split(",")[1])
-                    }}
                     pixelOffset={-10}
                     onCloseClick={() => setSelectedCreature(null)}
                 >
                     <div>{selectedCreature.name}</div>
                 </InfoWindow> : null
-            }
+            }</Marker>)}
        </GoogleMap> 
     )
 }
