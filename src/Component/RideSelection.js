@@ -8,7 +8,7 @@ export default class RideSelection extends Component{
         creature_id: null,
         starting_location: "",
         ending_location: "",
-        distance: 20.0,
+        distance: 30.0,
         duration: 0.0,
         price: 0.0
     }
@@ -19,20 +19,73 @@ export default class RideSelection extends Component{
     //     })
     // }
 
+    createNewTrip = () => {
+
+
+        let simDistance = this.state.distance
+        let simDuration = parseFloat(this.state.duration)
+        let simLocation = "40.74,-73.81"
+        let actualPrice = this.state.price
+
+        let tripObj = {
+            user_id: this.state.user_id,
+            creature_id: this.state.creature_id,
+            starting_location: this.state.starting_location,
+            ending_location: simLocation,
+            distance: simDistance,
+            duration: simDuration,
+            price: actualPrice
+        }
+
+        fetch(`http://localhost:3000/creatures/${this.state.creature_id}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type" : "application/json",
+                "Authorization" : `Bearer ${localStorage.token}`
+            },
+            body: JSON.stringify({
+                location: simLocation
+            })
+        })
+
+        fetch('http://localhost:3000/trips', {
+            method: "POST",
+            headers: {
+                "Content-Type" : "application/json",
+                "Authorization" : `Bearer ${localStorage.token}`
+            },
+            body: JSON.stringify(tripObj)
+        })
+    }
+
     componentDidUpdate(prevProps, prevState) {
         if (this.props.creature.id !== prevState.creature_id) {
             // console.log(prevProps)
+            
             this.setState({
                 user_id: this.props.userObj.id,
                 creature_id: this.props.creature.id,
                 starting_location: this.props.creature.location
-        })}
+        }, () => this.priceChange())}
+        
+    }
+
+    priceChange = () => {
+        let durPrice = parseFloat(this.state.duration) * 1
+        let disPrice = this.state.distance * .5
+        let multiplier = this.props.creature.tier_multiplier >= 1 ? this.props.creature.tier_multiplier : 1 
+        let price = (durPrice + disPrice) * multiplier
+        
+        this.setState({
+            price
+        })
     }
 
     handleChange = (e) => {
         this.setState({
             [e.target.name]:e.target.value
-        })
+        }, () => this.priceChange())
+
     }
 
     render(){
@@ -50,6 +103,8 @@ export default class RideSelection extends Component{
                     </Form.Input>
                 </Form>
                 <h3>{this.props.creature.name}</h3>
+                <Button onClick={this.createNewTrip}>Giddyup!</Button>
+                <div>Estimated Price ${this.state.price}</div>
             </div>
             
         )
