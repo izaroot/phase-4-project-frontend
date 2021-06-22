@@ -1,11 +1,13 @@
 import React, {Component} from 'react'
-import Map from '../Map'
+import MapContainer from '../Component/MapContainer';
+import RideSelection from '../Component/RideSelection'
 
 
 export default class CreateRideContainer extends Component{
 
     state = {
         creatures:[],
+        selectedCreature: {}
       }
     
       componentDidMount(){
@@ -18,13 +20,17 @@ export default class CreateRideContainer extends Component{
       });
       }
 
+    setSelectedCreature = (creature) => {
+      this.setState({
+        selectedCreature: creature
+      })
+    }
 
     render(){
         return(
-            <div id="mapContainer">
-                <div id="mapWrapper">
-                <Map creatures = {this.state.creatures}/>
-                </div>
+            <div>
+              <RideSelection creature={this.state.selectedCreature} />
+              <MapContainer setSelectedCreature={this.setSelectedCreature} creatures={this.state.creatures}/>
             </div>
         )
     }

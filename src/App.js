@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import './App.css';
 import Map, {MapComponent} from './Map';
 import {BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom'
+import {Button} from 'semantic-ui-react'
 import CreateRideContainer from './Container/CreateRideContainer';
 import LoginContainer from './Container/LoginContainer'
 import ShowCreaturesContainer from './Container/ShowCreaturesContainer';
@@ -28,30 +29,21 @@ class App extends Component{
   }
   
 
-  handleLogin = (state) => {
-      fetch('http://localhost:3000/login', {
-        method: "POST",
-        headers: {
-          "Content-Type" : "application/json"
-        },
-        body: JSON.stringify({
-          username: state.username,
-          password: state.password
-        })
-      })
-      .then(resp => resp.json())
-      .then(userJWT => {
-        if (userJWT.message){
-          alert(userJWT.message)
-        }
-        else{
-          localStorage.token = userJWT.jwt
-          this.setState({
-              user: userJWT.user,
-              isLoggedIn: true
-          })
-        }
-      })
+  
+
+  setUser = (user) => {
+    this.setState({
+        user,
+        isLoggedIn: true
+    })
+  }
+
+  handleLogout = () => {
+    this.setState({
+      user: {},
+      isLoggedIn: false
+    })
+    localStorage.clear()
   }
 
 
@@ -75,11 +67,12 @@ class App extends Component{
             <li>
               <Link to="/account">Account</Link>
             </li>
+            {this.state.isLoggedIn ? <Button onClick={this.handleLogout}>Logout</Button> : null}
           </ul>
         </nav>
         <Switch>
             <Route exact path="/">
-                  {this.state.isLoggedIn ? null : <LoginContainer handleLogin={this.handleLogin} />}
+                  {this.state.isLoggedIn ? null : <LoginContainer setUser={this.setUser} />}
             </Route>
             <Route path="/newride">
                 <CreateRideContainer />
