@@ -7,17 +7,29 @@ export default class CreateRideContainer extends Component{
 
     state = {
         creatures:[],
-        selectedCreature: {}
+        filteredCreatures: [],
+        selectedCreature: {},
       }
-    
-      componentDidMount(){
-      fetch("http://localhost:3000/creatures")
+
+      getCreatures = () => {
+        fetch("http://localhost:3000/creatures")
       .then((r) => r.json())
       .then((creaturesArray) => {
         this.setState({
-          creatures: creaturesArray
+          creatures: creaturesArray,
+          filteredCreatures: creaturesArray
         })
-      });
+      })
+      }
+
+      // resetCreatures = () => {
+      //   this.setState({
+      //     filteredCreatures: this.state.creatures
+      //   })
+      // }
+    
+      componentDidMount(){
+        this.getCreatures()
       }
 
     setSelectedCreature = (creature) => {
@@ -26,11 +38,27 @@ export default class CreateRideContainer extends Component{
       })
     }
 
+    updateCreatLoc = (updatedCreature) => {
+      let updatedCreatures = this.state.filteredCreatures.map(creature => creature.id !== updatedCreature.id ? creature : updatedCreature )
+      this.setState({
+        filteredCreatures: updatedCreatures
+      })
+    }
+
+    filterTest = () => {
+      let filteredCreatures = this.state.creatures.filter(creature => creature.id === 30)
+      this.setState({
+        filteredCreatures:filteredCreatures
+      })
+    }
+
     render(){
         return(
             <div>
-              <RideSelection creature={this.state.selectedCreature} userObj = {this.props.userObj}/>
-              <MapContainer setSelectedCreature={this.setSelectedCreature} creatures={this.state.creatures}/>
+              <RideSelection getCreatures = {this.getCreatures} updateCreatLoc={this.updateCreatLoc} creature={this.state.selectedCreature} userObj = {this.props.userObj}/>
+              <MapContainer setSelectedCreature={this.setSelectedCreature} creatures={this.state.filteredCreatures}/>
+              {/* <button onClick = {this.filterTest}>Show One Creature Hopefully</button>
+              <button onClick = {this.resetCreatures}>Reset Creatures</button> */}
             </div>
         )
     }

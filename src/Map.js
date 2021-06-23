@@ -9,7 +9,10 @@ function MapComponent(props) {
        <GoogleMap
        defaultZoom={12}
        defaultCenter={{ lat: 40.730610, lng: -73.935242}}>
-           {props.creatures.map(creature => <Marker 
+           {props.creatures.map(creature => <Marker
+                            visible = {creature.id > 0 ? true : false} 
+                            key = {creature.id}
+                            draggable = {true}
                             onMouseOver={() => setSelectedCreature(creature)}
                             onClick={() => props.setCreature(creature)} 
                             position={{lat: parseFloat(creature.location.split(",")[0]), lng: parseFloat(creature.location.split(",")[1])}}>

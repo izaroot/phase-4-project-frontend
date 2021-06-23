@@ -21,11 +21,42 @@ export default class RideSelection extends Component{
 
     createNewTrip = () => {
 
+        let starting_location = this.state.starting_location
 
-        let simDistance = this.state.distance
-        let simDuration = parseFloat(this.state.duration)
-        let simLocation = "40.74,-73.81"
-        let actualPrice = this.state.price
+        let latConv = 0.0145
+        let lngConv = 0.0190
+
+        let latMax = 40.795660
+        let latMin = 40.669250
+        let simLat = Math.floor((latMin + (latMax - latMin)*Math.random())*1000000)/1000000
+
+        let lngMin = -74.070133
+        let lngMax = -73.806579
+        let simLng = Math.floor((lngMin + (lngMax - lngMin)*Math.random())*1000000)/1000000
+
+        let simLocation = simLat.toString().concat(",", simLng.toString())
+
+        let latInit = starting_location.split(",")[0]
+        let lngInit = starting_location.split(",")[1]
+
+        let latDelta = Math.abs(simLat - latInit)
+        let lngDelta = Math.abs(simLng - lngInit)
+
+        let latMiles = Math.floor((latDelta/latConv)*10)/10
+        let lngMiles = Math.floor((lngDelta/lngConv)*10)/10
+
+        let simDistance = (latMiles + lngMiles) * ((Math.random()*2)+1)
+
+        let minDuration = simDistance/(this.props.creature.top_speed) + 1
+
+        let estDuration = this.state.duration * (Math.random() + .5)
+
+        let simDuration = minDuration > estDuration ? minDuration : estDuration
+
+        let durPrice = parseFloat(simDuration) * 1
+        let disPrice = simDistance * .5
+        let multiplier = this.props.creature.tier_multiplier >= 1 ? this.props.creature.tier_multiplier : 1
+        let actualPrice = (durPrice + disPrice) * multiplier
 
         let tripObj = {
             user_id: this.state.user_id,
@@ -37,6 +68,7 @@ export default class RideSelection extends Component{
             price: actualPrice
         }
 
+
         fetch(`http://localhost:3000/creatures/${this.state.creature_id}`, {
             method: "PATCH",
             headers: {
@@ -46,7 +78,12 @@ export default class RideSelection extends Component{
             body: JSON.stringify({
                 location: simLocation
             })
+        }).then(resp => resp.json())
+        .then( updatedCreature => {
+            this.props.updateCreatLoc(updatedCreature)
+            document.querySelector("iframe").contentWindow.location.reload();
         })
+        
 
         fetch('http://localhost:3000/trips', {
             method: "POST",
