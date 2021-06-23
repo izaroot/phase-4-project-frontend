@@ -21,7 +21,30 @@ class App extends Component{
 
   state={
       isLoggedIn: false,
-      user: {}
+      user: {},
+      creatures:[],
+      filteredCreatures: [],
+      selectedCreature: {},
+  }
+
+
+  getCreatures = () => {
+    fetch("http://localhost:3000/creatures")
+  .then((r) => r.json())
+  .then((creaturesArray) => {
+    this.setState({
+      creatures: creaturesArray,
+    }
+    // ,this.setState({filteredCreatures: creaturesArray})
+    )
+  })
+  }
+
+  filterTest = () => {
+    let filteredCreatures = this.state.creatures//.filter(creature => creature.id !== 0)
+    this.setState({
+      filteredCreatures:filteredCreatures
+    })
   }
 
   getUserData = () => {
@@ -34,6 +57,7 @@ class App extends Component{
   }
   
   componentDidMount(){
+    this.getCreatures()
     if (localStorage.token) {
       this.setState({isLoggedIn: true})
       this.getUserData()
@@ -86,7 +110,7 @@ class App extends Component{
                   {this.state.isLoggedIn ? null : <LoginContainer setUser={this.setUser} />}
             </Route>
             <Route path="/newride">
-                <CreateRideContainer userObj = {this.state.user} />
+                <CreateRideContainer filterTest={this.filterTest} userObj = {this.state.user} creatures={this.state.creatures} filteredCreatures={this.state.filteredCreatures} />
             </Route>
             <Route path="/creatures" >
                 <ShowCreaturesContainer />

@@ -6,21 +6,21 @@ import RideSelection from '../Component/RideSelection'
 export default class CreateRideContainer extends Component{
 
     state = {
-        creatures:[],
-        filteredCreatures: [],
-        selectedCreature: {},
+        // creatures:[],
+        // filteredCreatures: [],
+        selectedCreature: {}
       }
 
-      getCreatures = () => {
-        fetch("http://localhost:3000/creatures")
-      .then((r) => r.json())
-      .then((creaturesArray) => {
-        this.setState({
-          creatures: creaturesArray,
-          filteredCreatures: creaturesArray
-        })
-      })
-      }
+    //   getCreatures = () => {
+    //     fetch("http://localhost:3000/creatures")
+    //   .then((r) => r.json())
+    //   .then((creaturesArray) => {
+    //     this.setState({
+    //       creatures: creaturesArray,
+    //       filteredCreatures: creaturesArray
+    //     })
+    //   })
+    //   }
 
       // resetCreatures = () => {
       //   this.setState({
@@ -28,9 +28,9 @@ export default class CreateRideContainer extends Component{
       //   })
       // }
     
-      componentDidMount(){
-        this.getCreatures()
-      }
+      // componentDidMount(){
+      //   this.getCreatures()
+      // }
 
     setSelectedCreature = (creature) => {
       this.setState({
@@ -39,26 +39,26 @@ export default class CreateRideContainer extends Component{
     }
 
     updateCreatLoc = (updatedCreature) => {
-      let updatedCreatures = this.state.filteredCreatures.map(creature => creature.id !== updatedCreature.id ? creature : updatedCreature )
+      let updatedCreatures = this.props.filteredCreatures.map(creature => creature.id !== updatedCreature.id ? creature : updatedCreature )
       this.setState({
         filteredCreatures: updatedCreatures
       })
     }
 
-    filterTest = () => {
-      let filteredCreatures = this.state.creatures.filter(creature => creature.id === 30)
-      this.setState({
-        filteredCreatures:filteredCreatures
-      })
-    }
+    // filterTest = () => {
+    //   let filteredCreatures = this.props.creatures.filter(creature => creature.id === 6)
+    //   this.setState({
+    //     filteredCreatures:filteredCreatures
+    //   })
+    // }
 
     render(){
         return(
             <div>
               <RideSelection getCreatures = {this.getCreatures} updateCreatLoc={this.updateCreatLoc} creature={this.state.selectedCreature} userObj = {this.props.userObj}/>
-              <MapContainer setSelectedCreature={this.setSelectedCreature} creatures={this.state.filteredCreatures}/>
-              {/* <button onClick = {this.filterTest}>Show One Creature Hopefully</button>
-              <button onClick = {this.resetCreatures}>Reset Creatures</button> */}
+              <MapContainer setSelectedCreature={this.setSelectedCreature} creatures={this.props.creatures} filteredCreatures={this.props.filteredCreatures}/>
+              <button onClick = {this.props.filterTest}>Show Creatures</button>
+              {/* <button onClick = {this.resetCreatures}>Reset Creatures</button> */}
             </div>
         )
     }
