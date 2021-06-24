@@ -6,7 +6,6 @@ import {Button} from 'semantic-ui-react'
 import CreateRideContainer from './Container/CreateRideContainer';
 import LoginContainer from './Container/LoginContainer'
 import ShowCreaturesContainer from './Container/ShowCreaturesContainer';
-import ViewRideContainer from './Container/ViewRideContainer';
 import AccountContainer from './Container/AccountContainer';
 
 
@@ -96,12 +95,11 @@ class App extends Component{
             <li>
               <Link to="/creatures">Creatures</Link>
             </li>
-            <li>
-              <Link to="/viewride">View Ride</Link>
-            </li>
-            <li>
+            {this.state.isLoggedIn 
+            ? <li>
               <Link to="/account">Account</Link>
             </li>
+            : null }
             {this.state.isLoggedIn ? <Button onClick={this.handleLogout}>Logout</Button> : null}
           </ul>
         </nav>
@@ -113,13 +111,10 @@ class App extends Component{
                 <CreateRideContainer filterTest={this.filterTest} userObj = {this.state.user} creatures={this.state.creatures} filteredCreatures={this.state.filteredCreatures} />
             </Route>
             <Route path="/creatures" >
-                <ShowCreaturesContainer />
-            </Route>
-            <Route path="/viewride">
-                <ViewRideContainer />
+                <ShowCreaturesContainer creatures = {this.state.creatures} />
             </Route>
             <Route path="/account">
-                <AccountContainer />
+                <AccountContainer user = {this.state.user} trips = {this.state.user.trips}/>
             </Route>
         </Switch>
       </Router>

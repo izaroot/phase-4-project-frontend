@@ -21,3 +21,17 @@ code {
   width: 800px;
   position: relative;
 }
+
+# SummaryMapContainer{
+  padding: 20px;
+}
+
+#SummaryMapWrapper{
+  height: 500px;
+  width: 800px;
+  position: relative;
+}
+
+.ride-summary-card{
+  border: solid black 1px
+}

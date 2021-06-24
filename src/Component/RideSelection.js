@@ -68,7 +68,6 @@ export default class RideSelection extends Component{
             price: actualPrice
         }
 
-
         fetch(`http://localhost:3000/creatures/${this.state.creature_id}`, {
             method: "PATCH",
             headers: {
@@ -92,7 +91,8 @@ export default class RideSelection extends Component{
                 "Authorization" : `Bearer ${localStorage.token}`
             },
             body: JSON.stringify(tripObj)
-        })
+        }).then(resp => resp.json())
+        .then(resp => this.props.setTripObj(resp))
     }
 
     componentDidUpdate(prevProps, prevState) {

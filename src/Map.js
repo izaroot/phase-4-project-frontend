@@ -47,7 +47,10 @@ function MapComponent(props) {
                     pixelOffset={-10}
                     onCloseClick={() => setSelectedCreature(null)}
                 >
-                    <div>{selectedCreature.name}</div>
+                    <div>
+                        {selectedCreature.name}
+                        <img width="80" src = {selectedCreature.image}/>
+                    </div>
                 </InfoWindow> : null
             }</Marker>)}
        </GoogleMap> 

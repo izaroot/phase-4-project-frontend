@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import MapContainer from '../Component/MapContainer';
 import RideSelection from '../Component/RideSelection'
+import RideSummary from '../Component/RideSummary';
 
 
 export default class CreateRideContainer extends Component{
@@ -8,7 +9,14 @@ export default class CreateRideContainer extends Component{
     state = {
         // creatures:[],
         // filteredCreatures: [],
-        selectedCreature: {}
+        selectedCreature: {},
+        tripObj:{}
+      }
+
+      setTripObj = (tripObj) => {
+        this.setState({
+          tripObj:tripObj
+        })
       }
 
     //   getCreatures = () => {
@@ -55,8 +63,12 @@ export default class CreateRideContainer extends Component{
     render(){
         return(
             <div>
-              <RideSelection getCreatures = {this.getCreatures} updateCreatLoc={this.updateCreatLoc} creature={this.state.selectedCreature} userObj = {this.props.userObj}/>
+              {!this.state.tripObj.id  
+              ? <div>
+                <RideSelection setTripObj = {this.setTripObj} getCreatures = {this.getCreatures} updateCreatLoc={this.updateCreatLoc} creature={this.state.selectedCreature} userObj = {this.props.userObj}/>
               <MapContainer setSelectedCreature={this.setSelectedCreature} creatures={this.props.creatures} filteredCreatures={this.props.filteredCreatures}/>
+              </div>
+              : <RideSummary tripObj = {this.state.tripObj}></RideSummary>}
               <button onClick = {this.props.filterTest}>Show Creatures</button>
               {/* <button onClick = {this.resetCreatures}>Reset Creatures</button> */}
             </div>
