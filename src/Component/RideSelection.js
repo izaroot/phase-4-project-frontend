@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import { Form, Input, Button } from 'semantic-ui-react'
+import { Form, Input, Button, Segment } from 'semantic-ui-react'
 
 export default class RideSelection extends Component{
 
@@ -79,8 +79,7 @@ export default class RideSelection extends Component{
             })
         }).then(resp => resp.json())
         .then( updatedCreature => {
-            this.props.updateCreatLoc(updatedCreature)
-            document.querySelector("iframe").contentWindow.location.reload();
+            this.props.updateCreatLoc(updatedCreature)    
         })
         
 
@@ -118,9 +117,10 @@ export default class RideSelection extends Component{
         })
     }
 
-    handleChange = (e) => {
+    handleChange = (e, data) => {
+        let packet = !!e.target.value ? e.target : data 
         this.setState({
-            [e.target.name]:e.target.value
+            [packet.name]: packet.value
         }, () => this.priceChange())
 
     }
@@ -128,20 +128,24 @@ export default class RideSelection extends Component{
     render(){
         return(
             <div>
-                <div>Ride Selection</div>
+                
                 <Form onChange={(e) => this.handleChange(e)}>
-                    <Form.Radio type="radio" value="1" checked={1 == this.state.duration} label="1 hour" name="duration"></Form.Radio>
-                    <Form.Radio type="radio" value="2" checked={2 == this.state.duration} label="2 hours" name="duration"></Form.Radio>
-                    <Form.Radio type="radio" value="6" checked={6 == this.state.duration} label="6 hours"name="duration"></Form.Radio>
-                    <Form.Radio type="radio" value="12" checked={12 == this.state.duration} label="12 hours"name="duration"></Form.Radio>
-                    <Form.Radio type="radio" value="24" checked={24 == this.state.duration} label="1 day"name="duration"></Form.Radio>
-                    <Form.Radio type="radio" value="48" checked={48 == this.state.duration} label="2 days"name="duration"></Form.Radio>
-                   <Form.Input type="range" min="0" max="100" step="10" value={this.state.distance} name="distance" label={`${this.state.distance} miles`} >
+                  
+                        
+                    <Form.Radio onChange={(e, data) => this.handleChange(e, data)} type="radio" value="1" checked={1 == this.state.duration} label="1 hour" name="duration"></Form.Radio>
+                    <Form.Radio onChange={(e, data) => this.handleChange(e, data)} type="radio" value="2" checked={2 == this.state.duration} label="2 hours" name="duration"></Form.Radio>
+                    <Form.Radio onChange={(e, data) => this.handleChange(e, data)} type="radio" value="6" checked={6 == this.state.duration} label="6 hours"name="duration"></Form.Radio>
+                    <Form.Radio onChange={(e, data) => this.handleChange(e, data)} type="radio" value="12" checked={12 == this.state.duration} label="12 hours"name="duration"></Form.Radio>
+                    <Form.Radio onChange={(e, data) => this.handleChange(e, data)} type="radio" value="24" checked={24 == this.state.duration} label="1 day"name="duration"></Form.Radio>
+                    <Form.Radio onChange={(e, data) => this.handleChange(e, data)} type="radio" value="48" checked={48 == this.state.duration} label="2 days"name="duration"></Form.Radio><br/><br/>
+                   <Form.Input type="range" min="0" max="100" step="10" value={this.state.distance} name="distance" labelPosition="" label={`${this.state.distance} miles`} >
                     </Form.Input>
+                    
                 </Form>
-                <h3>{this.props.creature.name}</h3>
-                <Button onClick={this.createNewTrip}>Giddyup!</Button>
-                <div>Estimated Price ${this.state.price}</div>
+                <h3>{this.props.creature.name}</h3><br/>
+                <div>Estimated Price ${this.state.price}</div><br/>
+                {!!this.props.userObj.id ?<Button onClick={this.createNewTrip}>Giddyup!</Button> : <h4>Login to start your trip.</h4>}
+                
             </div>
             
         )

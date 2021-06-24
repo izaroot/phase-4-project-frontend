@@ -1,8 +1,7 @@
 import React, {Component} from 'react'
 import './App.css';
-import Map, {MapComponent} from './Map';
-import {BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom'
-import {Button} from 'semantic-ui-react'
+import {BrowserRouter as Router, Switch, Route, Link, withRouter} from 'react-router-dom'
+import {Button, Menu} from 'semantic-ui-react'
 import CreateRideContainer from './Container/CreateRideContainer';
 import LoginContainer from './Container/LoginContainer'
 import ShowCreaturesContainer from './Container/ShowCreaturesContainer';
@@ -25,6 +24,10 @@ class App extends Component{
       filteredCreatures: [],
       selectedCreature: {},
   }
+
+  handleItemClick = (e, { name }) => this.setState({ activeItem: name })
+
+  handlePageChange = (newUrl) => {this.props.history.push(newUrl)}
 
 
   getCreatures = () => {
@@ -52,7 +55,10 @@ class App extends Component{
       "Authorization":`Bearer ${localStorage.token}`
     }})
     .then((r) => r.json())
-    .then((user) => this.setState({user}))
+    .then((user) => {
+      this.handlePageChange('/newride')
+      this.setState({user})
+    })
   }
   
   componentDidMount(){
@@ -66,6 +72,7 @@ class App extends Component{
   }
 
   setUser = (user) => {
+    this.handlePageChange('/newride')
     this.setState({
         user,
         isLoggedIn: true
@@ -82,33 +89,58 @@ class App extends Component{
 
 
   render(){
+    const { activeItem } = this.state
     return( 
       <Router>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/newride">New Ride</Link>
-            </li>
-            <li>
-              <Link to="/creatures">Creatures</Link>
-            </li>
-            {this.state.isLoggedIn 
-            ? <li>
-              <Link to="/account">Account</Link>
-            </li>
-            : null }
-            {this.state.isLoggedIn ? <Button onClick={this.handleLogout}>Logout</Button> : null}
-          </ul>
-        </nav>
+         <Menu>
+         <Link {...(this.state.isLoggedIn ? {onClick: this.handleLogout} : {to: "/login"}  )}>
+        <Menu.Item
+          name='home'
+          active={activeItem === 'home'}
+          onClick={this.handleItemClick}
+        >
+         {this.state.isLoggedIn ? "Logout" : "Login"}
+        </Menu.Item>
+        </Link>
+
+        <Link to="/newride">
+        <Menu.Item
+          name='newride'
+          active={activeItem === 'newride'}
+          onClick={this.handleItemClick}
+        >
+         New Ride
+        </Menu.Item>
+        </Link>
+
+        <Link to="/creatures">
+        <Menu.Item
+          name='creatures'
+          active={activeItem === 'creatures'}
+          onClick={this.handleItemClick}
+        >
+          Creatures
+        </Menu.Item>
+        </Link>
+
+        {this.state.isLoggedIn ?
+        <Link to="/account">
+        <Menu.Item
+          name='account'
+          active={activeItem === 'account'}
+          onClick={this.handleItemClick}
+        >
+          Account
+        </Menu.Item>
+        </Link>
+        : null}
+      </Menu>
         <Switch>
-            <Route exact path="/">
+            <Route exact path="/login">
                   {this.state.isLoggedIn ? null : <LoginContainer setUser={this.setUser} />}
             </Route>
             <Route path="/newride">
-                <CreateRideContainer filterTest={this.filterTest} userObj = {this.state.user} creatures={this.state.creatures} filteredCreatures={this.state.filteredCreatures} />
+                <CreateRideContainer getUserData={this.getUserData} filterTest={this.filterTest} userObj = {this.state.user} creatures={this.state.creatures} filteredCreatures={this.state.filteredCreatures} />
             </Route>
             <Route path="/creatures" >
                 <ShowCreaturesContainer creatures = {this.state.creatures} />
@@ -124,4 +156,4 @@ class App extends Component{
   }
 }
 
-export default App;
+export default withRouter(App);

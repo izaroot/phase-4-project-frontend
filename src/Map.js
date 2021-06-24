@@ -47,9 +47,10 @@ function MapComponent(props) {
                     pixelOffset={-10}
                     onCloseClick={() => setSelectedCreature(null)}
                 >
-                    <div>
+                    <div style={{"text-align": "center"}}>
+                        
+                        <img style=  {{"width":"70px", "height": "70px", "object-fit": "cover", "border-radius": "100%" }} src = {selectedCreature.image}/><br/>
                         {selectedCreature.name}
-                        <img width="80" src = {selectedCreature.image}/>
                     </div>
                 </InfoWindow> : null
             }</Marker>)}

@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import MapContainer from '../Component/MapContainer';
 import RideSelection from '../Component/RideSelection'
 import RideSummary from '../Component/RideSummary';
+import { Segment } from 'semantic-ui-react';
 
 
 export default class CreateRideContainer extends Component{
@@ -64,10 +65,14 @@ export default class CreateRideContainer extends Component{
         return(
             <div>
               {!this.state.tripObj.id  
-              ? <div>
+              ? <Segment.Group horizontal>
+                <Segment>
                 <RideSelection setTripObj = {this.setTripObj} getCreatures = {this.getCreatures} updateCreatLoc={this.updateCreatLoc} creature={this.state.selectedCreature} userObj = {this.props.userObj}/>
+                </Segment>
+                <Segment>
               <MapContainer setSelectedCreature={this.setSelectedCreature} creatures={this.props.creatures} filteredCreatures={this.props.filteredCreatures}/>
-              </div>
+              </Segment>
+              </Segment.Group>
               : <RideSummary tripObj = {this.state.tripObj}></RideSummary>}
               <button onClick = {this.props.filterTest}>Show Creatures</button>
               {/* <button onClick = {this.resetCreatures}>Reset Creatures</button> */}
