@@ -36,6 +36,7 @@ export default class LoginContainer extends Component{
             localStorage.token = userJWT.jwt
             this.props.setUser(userJWT.user)
             this.handleInputClear()
+            window.location.reload()
           }
         })
     }
@@ -81,7 +82,9 @@ export default class LoginContainer extends Component{
         return(
             <div>
                 <Form onChange={(e) => this.handleInputChange(e)} 
-                onSubmit={() => {this.state.loginDisplay ? this.handleLogin(this.state) : this.handleRegister(this.state)}}>
+                onSubmit={
+                  () => {this.state.loginDisplay ? this.handleLogin(this.state) : this.handleRegister(this.state)}
+                  }>
                 <Form.Input
                     autoComplete="off"
                     placeholder='Username'

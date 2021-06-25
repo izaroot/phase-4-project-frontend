@@ -27,7 +27,9 @@ class App extends Component{
 
   handleItemClick = (e, { name }) => this.setState({ activeItem: name })
 
-  handlePageChange = (newUrl) => {this.props.history.push(newUrl)}
+  handlePageChange = (newUrl) => {
+    this.props.history.push(newUrl)
+    }
 
 
   getCreatures = () => {
@@ -58,6 +60,12 @@ class App extends Component{
     .then((user) => {
       this.handlePageChange('/newride')
       this.setState({user})
+    })
+  }
+
+  updateUserData = (userObj) => {
+    this.setState({
+      user: userObj
     })
   }
   
@@ -146,7 +154,7 @@ class App extends Component{
                 <ShowCreaturesContainer creatures = {this.state.creatures} />
             </Route>
             <Route path="/account">
-                <AccountContainer user = {this.state.user} trips = {this.state.user.trips}/>
+                <AccountContainer updateUserData = {this.updateUserData} user = {this.state.user} trips = {this.state.user.trips}/>
             </Route>
         </Switch>
       </Router>

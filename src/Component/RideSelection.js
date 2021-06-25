@@ -144,7 +144,7 @@ export default class RideSelection extends Component{
                 </Form>
                 <h3>{this.props.creature.name}</h3><br/>
                 <div>Estimated Price ${this.state.price}</div><br/>
-                {!!this.props.userObj.id ?<Button onClick={this.createNewTrip}>Giddyup!</Button> : <h4>Login to start your trip.</h4>}
+                {!!this.props.userObj.id ? !!this.state.creature_id ? <Button onClick={this.createNewTrip}> Giddyup!</Button> : <h4>Select a creature to begin your trip.</h4> : <h4>Login to start your trip.</h4>}
                 
             </div>
             
