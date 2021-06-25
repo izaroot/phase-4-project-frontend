@@ -9,7 +9,6 @@ export default class MapContainer extends Component{
                 <div id="mapWrapper">
                 <Map creatures = {this.props.creatures} filteredCreatures={this.props.filteredCreatures} setCreature={this.props.setSelectedCreature}/>
                 </div>
-                <div>Filters</div>
             </div>
         )
     }

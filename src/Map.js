@@ -32,12 +32,7 @@ function MapComponent(props) {
        defaultCenter={{ lat: 40.730610, lng: -73.935242}}>
            {props.creatures.map(creature => <Marker
                             visible={true}
-                            icon={{url: urlImg, scaledSize: new window.google.maps.Size(
-                                props.filteredCreatures.find(storedCreature => storedCreature.id === creature.id) ? 40
-                                    : 0, 
-                                props.filteredCreatures.find(storedCreature => storedCreature.id === creature.id) ? 40
-                                    : 0)
-                                }}
+                            // icon={{url: urlImg }}
                             key={creature.id}
                             onMouseOver={() => setSelectedCreature(creature)}
                             onClick={() => props.setCreature(creature)} 

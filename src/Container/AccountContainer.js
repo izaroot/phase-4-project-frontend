@@ -1,18 +1,37 @@
-import React, {Component} from 'react'
+import React, {Component, createRef} from 'react'
 import { Item, Segment } from 'semantic-ui-react'
 import RideSummaryCard from '../Component/RideSummaryCard'
-import { Form, Button } from 'semantic-ui-react'
+import { Form, Button, Ref, Visibility, Sticky, Grid } from 'semantic-ui-react'
 
 
 export default class AccountContainer extends Component{
 
     state={
+        calculations: {
+            direction: 'none',
+            height: 0,
+            width: 0,
+            topPassed: false,
+            bottomPassed: false,
+            pixelsPassed: 0,
+            percentagePassed: 0,
+            topVisible: false,
+            bottomVisible: false,
+            fits: false,
+            passing: false,
+            onScreen: false,
+            offScreen: false,
+          },
         displayEdit:false,
         email: this.props.user.email,
         image: this.props.user.image,
         bio: this.props.user.bio,
         tier: this.props.user.membership_tier
     }
+
+    contextRef = createRef()
+
+    handleUpdate = (e, { calculations }) => this.setState({ calculations })
 
     toggleEdit = () => {
         this.setState({
@@ -52,8 +71,13 @@ export default class AccountContainer extends Component{
     }
 
     render(){
+        const { calculations } = this.state
+
         return(
-            <Segment.Group horizontal>
+            <Ref innerRef={this.contextRef}>
+            <Grid columns={2}>
+                <Grid.Column>
+                <Sticky>
                 <Segment>
                     <h2>My Account</h2>
                     <img style=  {{"width":"200px", "height": "200px", "object-fit": "cover", "border-radius": "100%" }} src ={this.props.user.image}/>
@@ -80,7 +104,12 @@ export default class AccountContainer extends Component{
                     </div>}
                     
                 </Segment>
-                <Segment style={{"height" : "600px", "overflow" : "scroll"}}>
+                </Sticky>
+                </Grid.Column>
+                
+                <Grid.Column>
+                <Visibility onUpdate={this.handleUpdate}>
+                <Segment>
                 {!!this.props.user.trips ?
                 <div>
                     <Item.Group>
@@ -89,7 +118,10 @@ export default class AccountContainer extends Component{
                </div>
                : null }
                </Segment>
-            </Segment.Group>
+               </Visibility>
+               </Grid.Column>
+            </Grid>
+            </Ref>
         )
     }
 }

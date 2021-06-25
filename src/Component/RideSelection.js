@@ -91,7 +91,10 @@ export default class RideSelection extends Component{
             },
             body: JSON.stringify(tripObj)
         }).then(resp => resp.json())
-        .then(resp => this.props.setTripObj(resp))
+        .then(resp => {
+            this.props.setTripObj(resp)
+            this.props.addTrip(resp)
+        })
     }
 
     componentDidUpdate(prevProps, prevState) {

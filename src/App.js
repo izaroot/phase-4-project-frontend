@@ -95,6 +95,13 @@ class App extends Component{
     localStorage.clear()
   }
 
+  addTrip = (tripObj) => {
+    this.setState({
+      user: {...this.state.user, 
+        trips:[...this.state.user.trips, tripObj]
+      }
+    })
+  }
 
   render(){
     const { activeItem } = this.state
@@ -148,7 +155,7 @@ class App extends Component{
                   {this.state.isLoggedIn ? null : <LoginContainer setUser={this.setUser} />}
             </Route>
             <Route path="/newride">
-                <CreateRideContainer getUserData={this.getUserData} filterTest={this.filterTest} userObj = {this.state.user} creatures={this.state.creatures} filteredCreatures={this.state.filteredCreatures} />
+                <CreateRideContainer addTrip={this.addTrip} getUserData={this.getUserData} filterTest={this.filterTest} userObj = {this.state.user} creatures={this.state.creatures} filteredCreatures={this.state.filteredCreatures} />
             </Route>
             <Route path="/creatures" >
                 <ShowCreaturesContainer creatures = {this.state.creatures} />

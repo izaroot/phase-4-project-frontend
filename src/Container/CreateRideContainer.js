@@ -67,15 +67,14 @@ export default class CreateRideContainer extends Component{
               {!this.state.tripObj.id  
               ? <Segment.Group horizontal>
                 <Segment>
-                <RideSelection setTripObj = {this.setTripObj} getCreatures = {this.getCreatures} updateCreatLoc={this.updateCreatLoc} creature={this.state.selectedCreature} userObj = {this.props.userObj}/>
+                <RideSelection addTrip={this.props.addTrip} setTripObj = {this.setTripObj} getCreatures = {this.getCreatures} updateCreatLoc={this.updateCreatLoc} creature={this.state.selectedCreature} userObj = {this.props.userObj}/>
                 </Segment>
                 <Segment>
               <MapContainer setSelectedCreature={this.setSelectedCreature} creatures={this.props.creatures} filteredCreatures={this.props.filteredCreatures}/>
               </Segment>
               </Segment.Group>
               : <RideSummary tripObj = {this.state.tripObj}></RideSummary>}
-              <button onClick = {this.props.filterTest}>Show Creatures</button>
-              {/* <button onClick = {this.resetCreatures}>Reset Creatures</button> */}
+              
             </div>
         )
     }
